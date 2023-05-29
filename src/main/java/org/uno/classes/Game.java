@@ -59,6 +59,10 @@ public class Game {
      */
     public void playTurn(Player player) {
 
+        if(checkForWinner()) {
+            return;
+        }
+
         System.out.println("\n\n\nCurrent Player: " + player.getPlayerName());
 
         if(currentCard.isSpecialCard()) {
@@ -82,7 +86,12 @@ public class Game {
                 isClockwise = !isClockwise;
             }
 
-            if(currentCard != null && currentCard.isSpecialCard() && currentCard.getSpecialAction() != SpacialAction.REVERSE) {
+            if(currentCard != null && currentCard.getSpecialAction() == SpacialAction.SKIP) {
+                nextPlayerTurn();
+            }
+
+
+            if(currentCard != null && currentCard.isSpecialCard() && currentCard.getSpecialAction() != SpacialAction.REVERSE && currentCard.getSpecialAction() != SpacialAction.SKIP) {
                 doSpacialActions(currentCard, player);
             }
 
@@ -141,13 +150,8 @@ public class Game {
         */
         if(player.playCard(cardToPlay, currentCard)) {
             currentCard = cardToPlay;
-            if(checkForWinner(player)) {
-                return;
-            }
-            else{
-                System.out.println(player.getCardsInHand().size() + " cards remaining");
-                nextPlayerTurn();
-            }
+            System.out.println(player.getCardsInHand().size() + " cards remaining");
+            nextPlayerTurn();
         }
         else{
             System.out.println("Invalid card, try again...");
@@ -162,32 +166,29 @@ public class Game {
     */
     public void nextPlayerTurn() {
 
+        if(checkForWinner()){
+            return;
+        }
+
         if(currentCard != null && currentCard.getSpecialAction() == SpacialAction.REVERSE) {
             isClockwise = !isClockwise;
         }
+
+        int increaseIndex = 1;
+
         if(currentCard != null && currentCard.getSpecialAction() == SpacialAction.SKIP) {
-            if(isClockwise) {
-                currentPlayerIndex += 2;
-                if(currentPlayerIndex >= players.size()) {
-                    currentPlayerIndex = 0;
-                }
-            } else {
-                currentPlayerIndex -= 2;
-                if(currentPlayerIndex < 0) {
-                    currentPlayerIndex = players.size() - 1;
-                }
-            }
+            increaseIndex = 2;
         }
 
         if(isClockwise) {
-            currentPlayerIndex++;
+            currentPlayerIndex += increaseIndex;
             if(currentPlayerIndex >= players.size()) {
-                currentPlayerIndex = 0;
+                currentPlayerIndex = -1 + increaseIndex;
             }
         } else {
-            currentPlayerIndex--;
-            if(currentPlayerIndex < 0) {
-                currentPlayerIndex = players.size() - 1;
+            currentPlayerIndex -= increaseIndex;
+            if(currentPlayerIndex <= 0) {
+                currentPlayerIndex = players.size() - increaseIndex;
             }
         }
 
@@ -238,16 +239,17 @@ public class Game {
     /**
      * This function checks if a player has won the game by checking if they have no cards in their
      * hand.
-     * 
-     * @param player The player object for whom we are checking if they have won the game.
+     *
      * @return The method is returning a boolean value. It returns true if the player has no cards in
      * their hand and has won the game, and false otherwise.
      */
-    public boolean checkForWinner(Player player) {
-       if(player.getCardsInHand().size() == 0) {
-              System.out.println(player.getPlayerName() + " has won the game!");
-              return true;
-       }
+    public boolean checkForWinner() {
+        for(Player player : players) {
+            if (player.getCardsInHand().size() == 0) {
+                System.out.println(player.getPlayerName() + " has won the game!");
+                return true;
+            }
+        }
          return false;
     }
 

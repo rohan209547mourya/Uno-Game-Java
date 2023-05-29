@@ -1,5 +1,6 @@
 package org.uno.classes;
 
+import org.uno.enums.Color;
 import org.uno.enums.SpacialAction;
 
 import java.util.ArrayList;
@@ -30,30 +31,27 @@ public class Player {
     }
 
     /**
-     * The function checks if a given card can be played based on the color, number, and special action
-     * of the cards in the player's hand.
-     * 
-     * @param currentCard represents the card that is currently on the table and needs to be checked
-     * against the cards in the player's hand.
-     * @return The method is returning a boolean value, either true or false.
+     * Checks if the current card is a valid card to play based on the cards in hand.
+     *
+     * @param currentCard The current card to be checked.
+     * @return {@code true} if the current card is valid to play, {@code false} otherwise.
      */
     public boolean isValidCardToPlay(Card currentCard) {
-        for (Card card : cardsInHand) {
-            if (card.getColor() == currentCard.getColor() ||
-                    card.getNumber() == currentCard.getNumber()) {
+        for(Card card: cardsInHand){
+            if(card.getColor() == Color.BLACK) {
                 return true;
             }
-            else if (card.isSpecialCard()) {
-                if(card.getSpecialAction() != SpacialAction.WILD && card.getSpecialAction() != SpacialAction.WILD_DRAW_FOUR) {
-                    if(card.getColor() == currentCard.getColor()) {
-                        return true;
-                    }
-                }
-                else {
-                    return true;
-                }
+            if (card.getColor() == currentCard.getColor()) {
+                return true;
+            }
+            else if(!currentCard.isSpecialCard() && card.getNumber() == currentCard.getNumber()) {
+                return true;
+            }
+            else if(card.getNumber() == null && currentCard.isSpecialCard() && card.getSpecialAction() == currentCard.getSpecialAction()) {
+                return true;
             }
         }
+
         return false;
     }
 
