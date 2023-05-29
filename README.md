@@ -62,5 +62,10 @@ This documentation provides an overview of the classes and methods used in the U
   - `applyWildCardColor(Card wildCard)`: Allows the current player to choose the color for a wild card.
   - `toString()`: Overrides the default `toString` method to provide a string representation of the game state.
 
+### Usage
+- To run the game, run the following command in the terminal:
+  - `Open the project in IntelliJ IDEA and run the Main class`
+  - `Navigate to the src/main/java/org/uno/ directory and run the Main class`
+
 ## Conclusion
 This documentation provides an overview of the classes and methods used in the UNO game implementation. Understanding these classes and their functionalities is essential for further development and customization of the game.
