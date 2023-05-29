@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Game {
-    private Deck deck;
-    private List<Player> players;
+    private final Deck deck;
+    private final List<Player> players;
     private Card currentCard;
     private int currentPlayerIndex;
     private boolean isClockwise;
@@ -26,6 +26,10 @@ public class Game {
         this.isFirstTurn = true;
     }
 
+    /**
+     * The start function initializes the game by shuffling the deck, dealing starting cards to
+     * players, drawing the first card, and starting the first player's turn.
+     */
     public void start(){
         System.out.println("Started the game...");
         deck.shuffleDeck();
@@ -47,6 +51,12 @@ public class Game {
         playTurn(firstPlayer);
     }
 
+    /**
+     * This function allows a player to take their turn in a game of Uno, including drawing a card,
+     * playing a card, and checking for a winner.
+     * 
+     * @param player The current player who is taking their turn.
+     */
     public void playTurn(Player player) {
 
         System.out.println("\n\n\nCurrent Player: " + player.getPlayerName());
@@ -58,6 +68,14 @@ public class Game {
             System.out.println("Current Card: " + currentCard.getNumber() + " of " + currentCard.getColor());
         }
 
+
+        
+        /*This code block is checking if it is the first turn of the game. If it is, it sets the
+        `isFirstTurn` flag to false and checks if the current card is a reverse card. If it is, it
+        changes the direction of play by toggling the `isClockwise` flag. Additionally, if the
+        current card is a special card other than a reverse card, it performs the special action by
+        calling the `doSpacialActions` method.
+        */
         if(isFirstTurn) {
             isFirstTurn = false;
             if(currentCard != null && currentCard.getSpecialAction() == SpacialAction.REVERSE) {
@@ -73,6 +91,11 @@ public class Game {
 
         player.showCards();
 
+        /*This code block is checking if the current player has a valid card to play based on the
+        current card in play. If the player does not have a valid card to play, the player draws a
+        card from the deck, adds it to their hand, and then moves on to the next player's turn by
+        calling the `nextPlayerTurn()` method.
+        */
         if(!player.isValidCardToPlay(currentCard)) {
             System.out.println("No valid card to play, drawing a card...");
             Card drawnCard = deck.drawCard();
@@ -107,6 +130,15 @@ public class Game {
         }
 
 
+        /*This code block is checking if the card the player wants to play is a valid card to play
+        based on the current card in play. If it is a valid card, it removes the card from the
+        player's hand, sets it as the current card, and checks if the player has won the game by
+        calling the `checkForWinner` method. If the player has won, the method returns. Otherwise,
+        it prints the number of cards remaining in the player's hand and moves on to the next
+        player's turn by calling the `nextPlayerTurn()` method. If the card is not valid, it prints
+        an error message and prompts the player to try again by calling the `playTurn(player)`
+        method.
+        */
         if(player.playCard(cardToPlay, currentCard)) {
             currentCard = cardToPlay;
             if(checkForWinner(player)) {
@@ -124,6 +156,10 @@ public class Game {
 
     }
 
+   /**
+    * This function determines the next player's turn based on the current card's special action and
+    * the direction of play.
+    */
     public void nextPlayerTurn() {
 
         if(currentCard != null && currentCard.getSpecialAction() == SpacialAction.REVERSE) {
@@ -164,6 +200,13 @@ public class Game {
         playTurn(nextPlayer);
     }
 
+   /**
+    * This function changes the color of a card based on user input and returns a boolean indicating if
+    * the operation was successful.
+    * 
+    * @return The method is returning a boolean value. If the color choice is invalid, it returns true.
+    * Otherwise, it returns false.
+    */
     private boolean changeCurrentCardColor() {
         System.out.println("Changing color to: ");
         System.out.println("1. Red");
@@ -192,6 +235,14 @@ public class Game {
     }
 
 
+    /**
+     * This function checks if a player has won the game by checking if they have no cards in their
+     * hand.
+     * 
+     * @param player The player object for whom we are checking if they have won the game.
+     * @return The method is returning a boolean value. It returns true if the player has no cards in
+     * their hand and has won the game, and false otherwise.
+     */
     public boolean checkForWinner(Player player) {
        if(player.getCardsInHand().size() == 0) {
               System.out.println(player.getPlayerName() + " has won the game!");
@@ -200,6 +251,13 @@ public class Game {
          return false;
     }
 
+    /**
+     * The function performs special actions based on the type of card played, such as changing the
+     * current card color, drawing cards for the next player, or skipping the next player's turn.
+     * 
+     * @param card The card that was just played by the current player.
+     * @param nextPlayer The next player who will take their turn in the game.
+     */
     public void doSpacialActions(Card card, Player nextPlayer) {
         if(card != null && card.getSpecialAction() == SpacialAction.WILD) {
             if (changeCurrentCardColor()) return;

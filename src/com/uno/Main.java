@@ -7,6 +7,9 @@ import com.uno.classes.Player;
 import java.util.List;
 
 public class Main {
+    /**
+     * The main function creates four players and starts a game with them.
+     */
     public static void main(String[] args) {
 
         Player player1 = new Player("Player 1");
