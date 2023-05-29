@@ -1,13 +1,24 @@
 package com.uno;
 
 import com.uno.classes.Deck;
+import com.uno.classes.Game;
+import com.uno.classes.Player;
+
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        Deck deck = new Deck();
 
+        Player player1 = new Player("Player 1");
+        Player player2 = new Player("Player 2");
+        Player player3 = new Player("Player 3");
+        Player player4 = new Player("Player 4");
 
+        List<Player> players = List.of(player1, player2, player3, player4);
 
-        System.out.println(deck);
+        Game game = new Game(players);
+
+        game.start();
     }
+
 }

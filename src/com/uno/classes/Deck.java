@@ -13,7 +13,6 @@ public class Deck {
 
     public Deck() {
         initializeDeck();
-        shuffleDeck();
     }
 
     public void shuffleDeck() {
@@ -23,30 +22,34 @@ public class Deck {
     private void initializeDeck(){
         for (Color color : Color.values()) {
             for (NumberValue number : NumberValue.values()) {
-                if (number == NumberValue.ZERO) {
-                    this.deck.add(new Card(color, number));
-                } else {
-                    this.deck.add(new Card(color, number));
-                    this.deck.add(new Card(color, number));
+                if(color != Color.BLACK) {
+                    if (number == NumberValue.ZERO) {
+                        this.deck.add(new Card(color, number));
+                    } else {
+                        this.deck.add(new Card(color, number));
+                        this.deck.add(new Card(color, number));
+                    }
                 }
             }
         }
         for (Color color : Color.values()) {
-            this.deck.add(new Card(color, SpacialAction.WILD));
-            this.deck.add(new Card(color, SpacialAction.WILD_DRAW_FOUR));
             for (SpacialAction spacialAction : SpacialAction.values()) {
-                if (spacialAction != SpacialAction.WILD && spacialAction != SpacialAction.WILD_DRAW_FOUR) {
+                if (spacialAction != SpacialAction.WILD && spacialAction != SpacialAction.WILD_DRAW_FOUR && color != Color.BLACK) {
                     this.deck.add(new Card(color, spacialAction));
                     this.deck.add(new Card(color, spacialAction));
                 }
             }
+        }
+
+        for (int i = 0; i < 4; i++) {
+            this.deck.add(new Card(Color.BLACK, SpacialAction.WILD));
+            this.deck.add(new Card(Color.BLACK, SpacialAction.WILD_DRAW_FOUR));
         }
     }
 
     public void replenish() {
         this.deck = new ArrayList<>();
         initializeDeck();
-        shuffleDeck();
     }
 
     public Card drawCard() {
@@ -58,14 +61,6 @@ public class Deck {
 
     @Override
     public String toString() {
-        System.out.println(this.deck.size());
-        StringBuilder stringBuilder = new StringBuilder();
-
-        for (Card card : this.deck) {
-            stringBuilder.append(card.toString());
-            stringBuilder.append("\n");
-        }
-
-        return stringBuilder.toString();
+        return "["+ deck + "]";
     }
 }

@@ -6,9 +6,17 @@ import com.uno.enums.SpacialAction;
 
 public class Card {
 
-    private final Color color;
+    private Color color;
     private final NumberValue number;
     private final SpacialAction spacialAction;
+
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_RED = "\u001B[31m";
+
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_BLUE = "\u001B[34m";
+
+    public static final String ANSI_GREEN = "\u001B[32m";
 
 
     public Card(Color color, NumberValue number) {
@@ -30,23 +38,49 @@ public class Card {
     public NumberValue getNumber() {
         return number;
     }
+    public void setColor(Color color) {
+        this.color = color;
+    }
 
 
-    public SpacialAction getSpacialAction() {
+    public SpacialAction getSpecialAction() {
         return spacialAction;
     }
 
-    public boolean isSpacialCard() {
+    public boolean isSpecialCard() {
         return spacialAction != null;
     }
 
 
+    public String getAnsiColor(Color color) {
+
+        switch (color){
+            case RED -> {
+                return ANSI_RED;
+            }
+            case BLUE -> {
+                return ANSI_BLUE;
+            }
+            case GREEN -> {
+                return ANSI_GREEN;
+            }
+            case YELLOW -> {
+                return ANSI_YELLOW;
+            }
+            default -> {
+                return ANSI_RESET;
+            }
+        }
+
+
+    }
+
     @Override
     public String toString() {
-        return "Card{" +
-                "color=" + color +
-                ", number=" + number +
-                ", spacialAction=" + spacialAction +
-                '}';
+        if(isSpecialCard()) {
+            return  getAnsiColor(color) + "{"+ spacialAction + " of " + color  +"}" + ANSI_RESET;
+        }
+
+        return getAnsiColor(color)  + "{"+ number + " of " + color  +"}" + ANSI_RESET ;
     }
 }
