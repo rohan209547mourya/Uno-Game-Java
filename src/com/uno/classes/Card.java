@@ -36,6 +36,10 @@ public class Card {
         return spacialAction;
     }
 
+    public boolean isSpacialCard() {
+        return spacialAction != null;
+    }
+
 
     @Override
     public String toString() {

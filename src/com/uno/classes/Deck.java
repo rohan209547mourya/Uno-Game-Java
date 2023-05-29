@@ -11,7 +11,6 @@ import java.util.List;
 public class Deck {
     List<Card> deck = new ArrayList<>();
 
-
     public Deck() {
         initializeDeck();
         shuffleDeck();
